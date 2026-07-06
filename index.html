@@ -4,35 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyElectronicLab</title>
-    
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1QOuhriqT5PyPaydnhuRK7ccPG2udhHT6">
-
     <style>
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
             overflow: hidden;
-            background-color: #0d1117;
+            background-color: #F7F8FA;
         }
         iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
+            width: 100%; height: 100%;
+            border: none; display: block;
+            opacity: 0;
+            transition: opacity 0.25s ease;
         }
+        iframe.ready { opacity: 1; }
     </style>
 </head>
 <body>
-
-    <iframe id="gasFrame"></iframe>
-
+    <iframe
+        id="gasFrame"
+        src="https://script.google.com/macros/s/AKfycbwAhMmAHnHeESHfmfUBM3a1LusPuxcbSm1K53eUrElzKROdnq43pMO5rbsOuKin0CEt/exec">
+    </iframe>
     <script>
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbwAhMmAHnHeESHfmfUBM3a1LusPuxcbSm1K53eUrElzKROdnq43pMO5rbsOuKin0CEt/exec';
-        const params  = window.location.search;
-        document.getElementById('gasFrame').src = GAS_URL + (params || '');
+        var GAS_URL = 'https://script.google.com/macros/s/AKfycbwAhMmAHnHeESHfmfUBM3a1LusPuxcbSm1K53eUrElzKROdnq43pMO5rbsOuKin0CEt/exec';
+        var frame   = document.getElementById('gasFrame');
+        var params  = window.location.search;
+        if (params) { frame.src = GAS_URL + params; }
+        frame.addEventListener('load', function () { frame.classList.add('ready'); });
     </script>
-
 </body>
 </html>
