@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyElectronicLab</title>
+    <title>מערכת בקרה וניהול</title>
     
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1QOuhriqT5PyPaydnhuRK7ccPG2udhHT6">
-    
-    <style> 
+
+    <style>
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #0d1117; /* רקע כהה ונקי בזמן טעינת המערכת */
+            background-color: #0d1117;
         }
         iframe {
             width: 100%;
@@ -26,7 +26,15 @@
 </head>
 <body>
 
-    <iframe src="https://script.google.com/macros/s/AKfycbwAhMmAHnHeESHfmfUBM3a1LusPuxcbSm1K53eUrElzKROdnq43pMO5rbsOuKin0CEt/exec"></iframe>
+    <iframe id="gasFrame"></iframe>
+
+    <script>
+        // מעביר את כל פרמטרי ה-URL מהדומיין הפרטי לתוך ה-GAS iframe
+        // לדוגמה: example.com?page=admin → מעביר ?page=admin לתוך ה-GAS
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbwAhMmAHnHeESHfmfUBM3a1LusPuxcbSm1K53eUrElzKROdnq43pMO5rbsOuKin0CEt/exec';
+        const params  = window.location.search; // כולל את ה-? בהתחלה אם יש פרמטרים
+        document.getElementById('gasFrame').src = GAS_URL + (params || '');
+    </script>
 
 </body>
 </html>
