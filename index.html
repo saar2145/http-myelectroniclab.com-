@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מערכת בקרה וניהול</title>
+    <title>MyElectronicLab</title>
     
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1QOuhriqT5PyPaydnhuRK7ccPG2udhHT6">
 
@@ -29,10 +29,8 @@
     <iframe id="gasFrame"></iframe>
 
     <script>
-        // מעביר את כל פרמטרי ה-URL מהדומיין הפרטי לתוך ה-GAS iframe
-        // לדוגמה: example.com?page=admin → מעביר ?page=admin לתוך ה-GAS
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbwAhMmAHnHeESHfmfUBM3a1LusPuxcbSm1K53eUrElzKROdnq43pMO5rbsOuKin0CEt/exec';
-        const params  = window.location.search; // כולל את ה-? בהתחלה אם יש פרמטרים
+        const params  = window.location.search;
         document.getElementById('gasFrame').src = GAS_URL + (params || '');
     </script>
 
