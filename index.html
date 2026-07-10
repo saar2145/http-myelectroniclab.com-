@@ -4,34 +4,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyElectronicLab</title>
+
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1QOuhriqT5PyPaydnhuRK7ccPG2udhHT6">
+
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            background-color: #F7F8FA;
+            background: #111827; /* רקע כהה-ניטרלי, לא צועק */
+            font-family: Arial, sans-serif;
         }
-        iframe {
-            width: 100%; height: 100%;
-            border: none; display: block;
+
+        /* ── מסך טעינה ─────────────────────────────────────────── */
+        #loadingScreen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+            background: #111827;
+            z-index: 10;
+            transition: opacity 0.5s ease;
+        }
+
+        #loadingScreen.hidden {
             opacity: 0;
-            transition: opacity 0.25s ease;
+            pointer-events: none;
         }
+
+        .banner-wrap {
+            width: min(480px, 82vw);
+        }
+
+        .banner-wrap img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 14px;
+            /* קצת גלו עדין שמתאים לצבעי הלוגו */
+            filter: drop-shadow(0 0 18px rgba(41, 182, 246, 0.25));
+        }
+
+        /* פס טעינה דק מתחת ללוגו */
+        .progress-bar {
+            width: min(300px, 60vw);
+            height: 3px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #1565C0, #29B6F6);
+            border-radius: 999px;
+            animation: progressAnim 3s ease-in-out forwards;
+        }
+
+        @keyframes progressAnim {
+            0%   { width: 0%; }
+            40%  { width: 55%; }
+            80%  { width: 82%; }
+            100% { width: 92%; } /* לא מגיע ל-100% - ימשיך כשהאתר מוכן */
+        }
+
+        /* ── "by saar cohen" ─────────────────────────────────────── */
+        .credit {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.18);
+            letter-spacing: 0.04em;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        /* ── iframe (מוסתר עד שמוכן) ─────────────────────────────── */
+        iframe {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 5;
+        }
+
         iframe.ready { opacity: 1; }
     </style>
 </head>
 <body>
+
+    <!-- מסך טעינה -->
+    <div id="loadingScreen">
+        <div class="banner-wrap">
+            <img src="https://lh3.googleusercontent.com/d/1-a1wyruaEH7ijcTd3_po5WJuHF64IMZ5"
+                 alt="MyElectronicLab">
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
+
+    <!-- קרדיט -->
+    <div class="credit">by saar cohen</div>
+
+    <!-- ה-GAS Web App (נטען ברקע) -->
     <iframe
         id="gasFrame"
         src="https://script.google.com/macros/s/AKfycbwAhMmAHnHeESHfmfUBM3a1LusPuxcbSm1K53eUrElzKROdnq43pMO5rbsOuKin0CEt/exec">
     </iframe>
+
     <script>
         var GAS_URL = 'https://script.google.com/macros/s/AKfycbwAhMmAHnHeESHfmfUBM3a1LusPuxcbSm1K53eUrElzKROdnq43pMO5rbsOuKin0CEt/exec';
         var frame   = document.getElementById('gasFrame');
-        var params  = window.location.search;
-        if (params) { frame.src = GAS_URL + params; }
-        frame.addEventListener('load', function () { frame.classList.add('ready'); });
+        var loading = document.getElementById('loadingScreen');
+
+        // העברת פרמטרי URL ל-GAS (למשל ?page=admin)
+        var params = window.location.search;
+        if (params) {
+            frame.src = GAS_URL + params;
+        }
+
+        // כשה-iframe מוכן - מציג אותו ומסתיר את מסך הטעינה
+        frame.addEventListener('load', function () {
+            frame.classList.add('ready');
+            loading.classList.add('hidden');
+            // מוחק לגמרי אחרי הפייד כדי לא לחסום קליקים
+            setTimeout(function () { loading.style.display = 'none'; }, 600);
+        });
     </script>
+
 </body>
 </html>
