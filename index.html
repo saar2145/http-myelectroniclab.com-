@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<!--
+  ============================================================
+   MyElectronicLab - GitHub Pages Wrapper  |  wrapper.html
+   גרסה: v1.5 (Improvement Plan סעיף 9: Timeout fallback 20s -
+   מסך שגיאה + כפתור רענון במקום מסך טעינה תקוע לנצח)
+  ============================================================
+-->
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -135,8 +142,23 @@
             frame.src = GAS_URL + params;
         }
 
+        // Timeout fallback - אם הטעינה נתקעת (GAS לא מגיב/קורס),
+        // המשתמש לא נשאר לנצח על מסך טעינה בלי שום הודעה
+        var loadTimeout = setTimeout(function () {
+            if (!frame.classList.contains('ready')) {
+                loading.innerHTML =
+                    '<div style="color:#E8E9EB;text-align:center;font-family:Arial;">' +
+                    '<div style="font-size:2rem;">😕</div>' +
+                    '<p style="margin:12px 0;">האתר מתקשה להיטען כרגע</p>' +
+                    '<button onclick="location.reload()" style="background:#1565C0;color:#fff;' +
+                    'border:none;border-radius:10px;padding:10px 22px;font-size:1rem;cursor:pointer;">' +
+                    'רענן ונסה שוב</button></div>';
+            }
+        }, 20000);
+
         // כשה-iframe מוכן - מציג אותו ומסתיר את מסך הטעינה
         frame.addEventListener('load', function () {
+            clearTimeout(loadTimeout);
             frame.classList.add('ready');
             loading.classList.add('hidden');
             // מוחק לגמרי אחרי הפייד כדי לא לחסום קליקים
